@@ -1,0 +1,41 @@
+package vital.splitspace.drawable;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import vital.splitspace.entity.Entity;
+
+/**
+ * Represents an object which will be drawn to the screen using an image
+ * instead of some more primitive drawing functions.
+ */
+public abstract class DrawableImage extends Entity implements Drawable
+{
+	protected Image img;
+	
+	public DrawableImage(String imagePath)
+	{
+		super();
+		
+		try{
+			img = new Image(imagePath);
+		} catch (SlickException e){
+			e.printStackTrace();
+		}
+		
+		// Turns off image blending.
+		img.setFilter(Image.FILTER_NEAREST);
+		
+		return;
+	}
+	
+	@Override
+	public void draw(GameContainer arg0, Graphics arg1)
+	{
+		img.draw(position.x, position.y);
+		
+		return;
+	}
+}
