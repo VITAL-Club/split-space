@@ -8,28 +8,29 @@ Notes: => functions needed
        * objects that appear on screen
 
                    |           0 0 0 0
-                   |           *Score
-                   |                       ______                  ______     *Enemy
-                   |                      ( @  @ )                ( @  @ )   => Spawn AI 
+     Level         |           *Score
+     Setup         |                       ______                  ______     *Enemy
+    Manager        |                      ( @  @ )                ( @  @ )   => Spawn AI 
                    |                        VVVV                    VVVV     => Collisions
                    |                                
                    |                         ▼                        ▼      *Enemy's bullet 
-                   |                                                        => Spawn, collisions & despawn
+       Sounds      |                                                        => Spawn, collisions & despawn
                    |                                                  
                    |                                      (~)               * Spaceship's bullet
-                   |                                       :      
-                   |                                       :
-                   |                                       :
+                   |                                       :                => Bullet Control
+    Particles      |                                       :                => Collisions
+   (explosion)     |                                       :                => Timer to spawn and despawn
                    |                                 - - - -
                    |                                 : 
                    |                                 :
                    |                                 :
                    |                                 /\                          *Spaceship
-                   |                                (  )
-                   |                               /|/\|\
+                   |                                (  )                         => PLayer control
+                   |                               /|/\|\                        => Collisions
                    |                              /_||||_\
                    |
                    |
                    |      /\   /\   /\
-                   |     (  ) (  ) (  )       *Lives
+                   |     (  ) (  ) (  )       *Lives      => Bonus lives
+                   |                          => Life Manager
                    
