@@ -19,7 +19,7 @@ Notes: => functions needed
                    |                                      (~)               * Spaceship's bullet
                    |                                       :                => Bullet Control
     Particles      |                                       :                => Collisions
-   (explosion)     |                                       :                => Timer to spawn and despawn
+                   |                                       :                => Timer to spawn and despawn
                    |                                 - - - -
                    |                                 : 
                    |                                 :
@@ -34,3 +34,4 @@ Notes: => functions needed
                    |     (  ) (  ) (  )       *Lives      => Bonus lives
                    |                          => Life Manager
                    
+Particles are for explosion from collision with the bullet to the Enemy or Spaceship
