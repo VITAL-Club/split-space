@@ -5,6 +5,6 @@ package vital.splitspace.main;
  */
 public class GlobalConstants
 {
-	public static final int GAME_WIDTH = 600;
+	public static final int GAME_WIDTH = 640;
 	public static final int GAME_HEIGHT = 480;
 }

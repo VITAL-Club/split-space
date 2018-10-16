@@ -1,5 +1,7 @@
 package vital.splitspace.drawable;
 
+import java.util.Random;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -21,6 +23,25 @@ public abstract class DrawableImage extends Entity implements Drawable
 		
 		try{
 			img = new Image(imagePath);
+		} catch (SlickException e){
+			e.printStackTrace();
+		}
+		
+		// Turns off image blending.
+		img.setFilter(Image.FILTER_NEAREST);
+		
+		return;
+	}
+	
+	public DrawableImage(String[] images)
+	{
+		super();
+		
+		Random rand = new Random();
+		int selection = rand.nextInt(images.length);
+		
+		try{
+			img = new Image(images[selection]);
 		} catch (SlickException e){
 			e.printStackTrace();
 		}

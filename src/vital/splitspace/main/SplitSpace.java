@@ -5,7 +5,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import vital.splitspace.contentManagement.Overseer;
+import vital.splitspace.entity.Enemy;
 import vital.splitspace.entity.Ship;
+import vital.splitspace.entity.Star;
 
 /**
  * This class represents the main game and all of its
@@ -33,9 +35,14 @@ public class SplitSpace extends BasicGame
 	@Override
 	public void init(GameContainer game) throws SlickException
 	{
+		game.setVSync(true);
+		game.setTargetFrameRate(60);
+		
 		overseer = new Overseer();
 		
 		game.setShowFPS(true);
+		
+		overseer.addEntity(new Star());
 		
 		// Adds the player to the game loop
 		Ship player = new Ship();

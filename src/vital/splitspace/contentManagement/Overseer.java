@@ -1,14 +1,19 @@
 package vital.splitspace.contentManagement;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+
+import vital.splitspace.datatypes.OrderedPair;
 import vital.splitspace.drawable.Drawable;
+import vital.splitspace.entity.Enemy;
 import vital.splitspace.entity.Entity;
 import vital.splitspace.entity.PlayerBullet;
 import vital.splitspace.entity.Ship;
+import vital.splitspace.main.GlobalConstants;
 
 /**
  *	The Overseer handles all additions and deletions of objects in
@@ -46,7 +51,8 @@ public class Overseer
 		if (e instanceof Drawable)
 			this.drawables.remove(e);
 		
-		//this.enemies.remove(e);
+		if (e instanceof Enemy)
+			this.enemies.remove(e);
 		
 		if (e instanceof PlayerBullet)
 			this.playerBullets.remove(e);
@@ -71,8 +77,8 @@ public class Overseer
 		
 		if (e instanceof PlayerBullet)
 			this.playerBullets.add((PlayerBullet) e);
-		//else if (e instanceof Enemy)
-		//	this.enemies.add(e)
+		else if (e instanceof Enemy)
+			this.enemies.add(e);
 		else if (e instanceof Ship)
 			this.player = (Ship) e;
 		
@@ -87,6 +93,24 @@ public class Overseer
 		return;
 	}
 	
+	private void spawnWave()
+	{
+		Random rand = new Random();
+		
+		int num = rand.nextInt(3);
+		
+		for (int i = 0; i < num; i++)
+		{
+			Enemy e = new Enemy();
+			
+			e.setPosition(new OrderedPair(rand.nextInt(GlobalConstants.GAME_WIDTH),-50));
+			
+			addEntity(e);
+		}
+		
+		return;
+	}
+	
 	public void update(Input input)
 	{
 		// The player shot a bullet
@@ -96,6 +120,9 @@ public class Overseer
 			b.setPosition(player.getPosition());
 			addEntity(b);
 		}
+		
+		if (enemies.size() == 0)
+			spawnWave();
 		
 		// Concurrent manipulation of a list isn't supported in Java,
 		// so we make a new list to temporarily hold all items that
