@@ -1,15 +1,10 @@
 package vital.splitspace.main;
 
-import java.util.ArrayList;
-
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-
-import vital.splitspace.drawable.Drawable;
-import vital.splitspace.entity.Entity;
+import vital.splitspace.contentManagement.Overseer;
 import vital.splitspace.entity.Ship;
 
 /**
@@ -19,11 +14,7 @@ import vital.splitspace.entity.Ship;
  */
 public class SplitSpace extends BasicGame
 {
-	private ArrayList<Entity> entities = new ArrayList<>();
-	private ArrayList<Drawable> drawables = new ArrayList<>();
-	
-	// User input is processed through this object.
-	private Input input = new Input(GlobalConstants.GAME_HEIGHT);
+	private Overseer overseer;
 	
 	public SplitSpace(String title)
 	{
@@ -32,36 +23,31 @@ public class SplitSpace extends BasicGame
 	}
 
 	@Override
-	public void render(GameContainer arg0, Graphics arg1) throws SlickException
+	public void render(GameContainer game, Graphics gfx) throws SlickException
 	{
-		for (Drawable d : drawables)
-			d.draw(arg0, arg1);
+		overseer.draw(game, gfx);
 		
 		return;
 	}
 
 	@Override
-	public void init(GameContainer arg0) throws SlickException
+	public void init(GameContainer game) throws SlickException
 	{
-		arg0.setShowFPS(true);
+		overseer = new Overseer();
+		
+		game.setShowFPS(true);
 		
 		// Adds the player to the game loop
 		Ship player = new Ship();
-		entities.add(player);
-		drawables.add(player);
+		overseer.addEntity(player);
 		
 		return;
 	}
 
 	@Override
-	public void update(GameContainer arg0, int arg1) throws SlickException
+	public void update(GameContainer game, int arg1) throws SlickException
 	{
-		// This checks the game window for any input between now and
-		// the last frame.
-		input.poll(GlobalConstants.GAME_WIDTH, GlobalConstants.GAME_HEIGHT);
-		
-		for (Entity e : entities)
-			e.update(input);
+		overseer.update(game.getInput());
 		
 		return;
 	}
