@@ -32,7 +32,7 @@ public abstract class DrawableImage extends Entity implements Drawable
 	}
 	
 	@Override
-	public void draw(GameContainer arg0, Graphics arg1)
+	public void draw(GameContainer game, Graphics gfx)
 	{
 		img.draw(position.x, position.y);
 		
