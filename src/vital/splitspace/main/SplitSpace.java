@@ -5,7 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import vital.splitspace.contentManagement.Overseer;
-import vital.splitspace.entity.Enemy;
+import vital.splitspace.datatypes.OrderedPair;
 import vital.splitspace.entity.Ship;
 import vital.splitspace.entity.Star;
 
@@ -40,12 +40,15 @@ public class SplitSpace extends BasicGame
 		
 		overseer = new Overseer();
 		
-		game.setShowFPS(true);
+		game.setShowFPS(false);
 		
 		overseer.addEntity(new Star());
 		
 		// Adds the player to the game loop
 		Ship player = new Ship();
+		// Puts player 3/4ths of the way down the screen
+		player.setPosition(new OrderedPair(GlobalConstants.GAME_WIDTH / 2,
+										   GlobalConstants.GAME_HEIGHT / 4*3));
 		overseer.addEntity(player);
 		
 		return;

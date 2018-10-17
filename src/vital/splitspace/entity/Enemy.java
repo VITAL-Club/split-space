@@ -1,5 +1,7 @@
 package vital.splitspace.entity;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 import vital.splitspace.drawable.DrawableImage;
@@ -20,6 +22,12 @@ public class Enemy extends DrawableImage
 		// TODO Auto-generated constructor stub
 		this.speed = (int) (Math.random() * 5 + 3);
 		this.velocity.x = this.speed;
+		
+		this.scale = 3;
+		
+		this.hitbox = new HitBox((int) (this.img.getWidth() * this.scale),
+								 (int) (this.img.getHeight() * this.scale), 
+								 this.position);
 	}
 
 	@Override
@@ -36,8 +44,19 @@ public class Enemy extends DrawableImage
 		} 
 	
 		move();
+		
+		// Sync hitbox and position
+		this.hitbox.setPosition(this.position);
 
 		return;
 		
 	}
+	
+	@Override
+	public void draw(GameContainer game, Graphics gfx)
+	{
+		drawScaled(game, gfx, scale);
+		return;
+	}
+	
 }

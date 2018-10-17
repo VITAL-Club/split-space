@@ -33,21 +33,21 @@ public class HitBox
 	 */
 	public boolean isColliding(HitBox other)
 	{
-		boolean otherInsideThisX = other.position.x >= this.position.x &&
-								   other.position.x <= 
-								  	this.position.x + this.width;
-		boolean thisInsideOtherX = this.position.x >= other.position.x &&
-								   this.position.x <= 
-								   	other.position.x + other.getWidth();
+		boolean otherInsideThisX = 
+				other.getPosition().x >= this.position.x &&
+				other.getPosition().x <= this.position.x + this.width;
+		boolean thisInsideOtherX = 
+				this.position.x >= other.getPosition().x &&
+				this.position.x <= other.getPosition().x + other.getWidth();
 		
 		if (otherInsideThisX || thisInsideOtherX)
 		{
-			boolean otherInsideThisY = other.position.x >= this.position.x &&
-	   				   				   other.position.x <= 
-	   				   				   	this.position.x + this.width;
-			boolean thisInsideOtherY = this.position.x >= other.position.x &&
-	   				   				   this.position.x <= 
-	   				   				   	other.position.x + other.getWidth();
+			boolean otherInsideThisY = 
+					other.getPosition().y >= this.position.y &&
+	   				other.getPosition().y <= this.position.y + this.height;
+			boolean thisInsideOtherY = 
+					this.position.y >= other.getPosition().y &&
+	   				this.position.y <= other.getPosition().y + other.getHeight();
 			
 			if (otherInsideThisY || thisInsideOtherY)
 				return true;
@@ -64,5 +64,15 @@ public class HitBox
 	public int getHeight()
 	{
 		return this.height;
+	}
+	
+	public OrderedPair getPosition()
+	{
+		return this.position;
+	}
+	
+	public void setPosition(OrderedPair op)
+	{
+		this.position = op;
 	}
 }

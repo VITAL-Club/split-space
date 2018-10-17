@@ -1,5 +1,7 @@
 package vital.splitspace.entity;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 /**
@@ -7,7 +9,6 @@ import org.newdawn.slick.Input;
  */
 public class Ship extends Controllable
 {
-	private HitBox hitbox;
 	
 	public Ship()
 	{
@@ -16,6 +17,7 @@ public class Ship extends Controllable
 		super("resources/sprites/ship.png");
 		
 		this.speed = 4;
+		this.scale = 3;
 		
 		// We set the keys we'll use for movement, as dictated by
 		// the Controllable parent class.
@@ -23,8 +25,8 @@ public class Ship extends Controllable
 		
 		// Sets up the HitBox according to the ship's image's dimensions, and
 		// links the HitBox's position to the ship's.
-		this.hitbox = new HitBox(img.getWidth(),
-								 img.getHeight(),
+		this.hitbox = new HitBox((int) (img.getWidth() * this.scale),
+								 (int) (img.getHeight() * this.scale),
 								 this.position);
 		
 		return;
@@ -34,8 +36,17 @@ public class Ship extends Controllable
 	public void update(Input input)
 	{
 		checkInputs(input);
+		
+		boundVelocity(img.getWidth(), img.getHeight());
 		move();
 		
+		return;
+	}
+	
+	@Override
+	public void draw(GameContainer game, Graphics gfx)
+	{
+		drawScaled(game, gfx, scale);
 		return;
 	}
 }

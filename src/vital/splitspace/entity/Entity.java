@@ -21,11 +21,15 @@ public abstract class Entity
 	
 	protected boolean destroy;
 	
+	protected HitBox hitbox;
+	protected float scale;
+	
 	public Entity()
 	{
 		this.position = new OrderedPair();
 		this.velocity = new OrderedPair();
 		this.speed = 0;
+		this.scale = 1;
 		
 		this.destroy = false;
 		
@@ -47,9 +51,9 @@ public abstract class Entity
 	public boolean isOffScreen(int width, int height)
 	{
 		if (this.position.x > GlobalConstants.GAME_WIDTH ||
-				this.position.x + width < 0 ||
+				this.position.x + (width * scale) < 0 ||
 				this.position.y > GlobalConstants.GAME_WIDTH ||
-				this.position.y + height < 0)
+				this.position.y + (height * scale) < 0)
 		{
 			return true;
 		}
@@ -57,19 +61,50 @@ public abstract class Entity
 			return false;
 	}
 	
+	public void boundVelocity(int width, int height)
+	{
+		if (this.position.x + this.velocity.x + (width * scale) > 
+					GlobalConstants.GAME_WIDTH ||
+				this.position.x + this.velocity.x < 0)
+		{
+			this.velocity.x = 0;
+		}
+		
+		if (this.position.y + this.velocity.y  + (height * scale) > 
+				GlobalConstants.GAME_HEIGHT ||
+			this.position.y + this.velocity.y < 0)
+		{
+			this.velocity.y = 0;
+		}
+	}
+	
 	public boolean needToDestroy()
 	{
 		return this.destroy;
 	}
 	
+	public void destroy()
+	{
+		this.destroy = true;
+		return;
+	}
+	
 	public void setPosition(OrderedPair op)
 	{
 		this.position = op;
+		if (this.hitbox != null)
+			this.hitbox.setPosition(this.position);
+		
 		return;
 	}
 	
 	public OrderedPair getPosition()
 	{
 		return new OrderedPair(this.position.x, this.position.y);
+	}
+	
+	public HitBox getHitBox()
+	{
+		return this.hitbox;
 	}
 }

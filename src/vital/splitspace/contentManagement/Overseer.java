@@ -10,8 +10,10 @@ import org.newdawn.slick.Input;
 import vital.splitspace.datatypes.OrderedPair;
 import vital.splitspace.drawable.Drawable;
 import vital.splitspace.entity.Enemy;
+import vital.splitspace.entity.EnemyBullet;
 import vital.splitspace.entity.Entity;
 import vital.splitspace.entity.PlayerBullet;
+import vital.splitspace.entity.Score;
 import vital.splitspace.entity.Ship;
 import vital.splitspace.main.GlobalConstants;
 
@@ -25,16 +27,21 @@ public class Overseer
 	// some checks.
 	private ArrayList<Entity> entities;
 	private ArrayList<Drawable> drawables;
-	private ArrayList<Entity> enemies;
+	private ArrayList<Enemy> enemies;
+	private ArrayList<EnemyBullet> enemyBullets;
 	private ArrayList<PlayerBullet> playerBullets;
 	private Ship player;
+	private Score score;
 	
 	public Overseer()
 	{
 		this.entities = new ArrayList<>();
 		this.drawables = new ArrayList<>();
 		this.enemies = new ArrayList<>();
+		this.enemyBullets = new ArrayList<>();
 		this.playerBullets = new ArrayList<>();
+		
+		this.score = new Score();
 		
 		return;
 	}
@@ -44,6 +51,7 @@ public class Overseer
 	 * 
 	 * @param e	The Entity to remove.
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public void removeEntity(Entity e)
 	{
 		this.entities.remove(e);
@@ -56,6 +64,9 @@ public class Overseer
 		
 		if (e instanceof PlayerBullet)
 			this.playerBullets.remove(e);
+		
+		if (e instanceof EnemyBullet)
+			this.enemyBullets.remove(e);
 		
 		if (this.player == e)
 			this.player = null;
@@ -77,8 +88,10 @@ public class Overseer
 		
 		if (e instanceof PlayerBullet)
 			this.playerBullets.add((PlayerBullet) e);
+		else if (e instanceof EnemyBullet)
+			this.enemyBullets.add((EnemyBullet) e);
 		else if (e instanceof Enemy)
-			this.enemies.add(e);
+			this.enemies.add((Enemy) e);
 		else if (e instanceof Ship)
 			this.player = (Ship) e;
 		
@@ -90,6 +103,8 @@ public class Overseer
 		for (Drawable d : this.drawables)
 			d.draw(game, gfx);
 		
+		score.draw(game, gfx);
+		
 		return;
 	}
 	
@@ -97,7 +112,7 @@ public class Overseer
 	{
 		Random rand = new Random();
 		
-		int num = rand.nextInt(3);
+		int num = rand.nextInt(6);
 		
 		for (int i = 0; i < num; i++)
 		{
@@ -111,15 +126,87 @@ public class Overseer
 		return;
 	}
 	
-	public void update(Input input)
+	private void checkForBullets(Input input)
 	{
 		// The player shot a bullet
 		if (input.isKeyPressed(Input.KEY_SPACE))
 		{
 			PlayerBullet b = new PlayerBullet();
-			b.setPosition(player.getPosition());
+			OrderedPair op = player.getPosition();
+			
+			b.setPosition(new OrderedPair(op.x + 18, op.y));
 			addEntity(b);
 		}
+	}
+	
+	private void checkForCollisions()
+	{
+		for (Enemy e : enemies)
+		{
+			if (player.getHitBox().isColliding(e.getHitBox()))
+			{
+				resetField();
+			}
+			
+			for (PlayerBullet p : playerBullets)
+			{
+				if (p.getHitBox().isColliding(e.getHitBox()))
+				{
+					e.destroy();
+					p.destroy();
+					
+					score.addPoints(100);
+					
+					// Break to avoid multi-hits
+					break;
+				}
+			}
+		}
+		
+		for (EnemyBullet eb : enemyBullets)
+		{
+			if (player.getHitBox().isColliding(eb.getHitBox()))
+			{
+				resetField();
+			}
+		}
+	}
+	
+	private void enemyShoot()
+	{
+		for (Enemy e : enemies)
+		{
+			if (Math.random() < ((double) 1 / 45))
+			{
+				EnemyBullet eb = new EnemyBullet();
+				eb.setPosition(new OrderedPair(e.getPosition().x,
+											   e.getPosition().y));
+				
+				addEntity(eb);
+			}
+		}
+	}
+	
+	private void resetField()
+	{
+		// TODO: Add life mechanic here
+		
+		drawables.removeAll(enemies);
+		drawables.removeAll(enemyBullets);
+		drawables.removeAll(playerBullets);
+		
+		enemies = new ArrayList<>();
+		playerBullets = new ArrayList<>();
+		enemyBullets = new ArrayList<>();
+		
+		player.setPosition(new OrderedPair(GlobalConstants.GAME_WIDTH / 2,
+										   GlobalConstants.GAME_HEIGHT /4*3));
+	}
+	
+	public void update(Input input)
+	{
+		checkForBullets(input);
+		checkForCollisions();
 		
 		if (enemies.size() == 0)
 			spawnWave();
@@ -140,6 +227,8 @@ public class Overseer
 		// Remove the items that requested to be destroyed.
 		for (Entity e : toRemove)
 			removeEntity(e);
+		
+		enemyShoot();
 		
 		return;
 	}

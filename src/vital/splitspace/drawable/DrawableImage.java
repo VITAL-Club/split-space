@@ -59,4 +59,11 @@ public abstract class DrawableImage extends Entity implements Drawable
 		
 		return;
 	}
+	
+	public void drawScaled(GameContainer game, Graphics gfx,
+			float scale)
+	{
+		img.getScaledCopy(scale).draw(position.x, position.y);
+		return;
+	}
 }

@@ -1,5 +1,7 @@
 package vital.splitspace.entity;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 /**
@@ -8,17 +10,17 @@ import org.newdawn.slick.Input;
  */
 public class PlayerBullet extends Controllable
 {
-	private HitBox hitbox;
 
 	public PlayerBullet()
 	{
 		super("resources/sprites/playerBullet.png");
 		
 		this.speed = 6;
+		this.scale = 2;
 		
-		hitbox = new HitBox(img.getWidth(),
-							img.getHeight(), 
-							this.position);
+		this.hitbox = new HitBox((int) (img.getWidth() * this.scale),
+								 (int) (img.getHeight() * this.scale), 
+								 this.position);
 		
 		setKeys(Input.KEY_UP, Input.KEY_DOWN, Input.KEY_LEFT, Input.KEY_RIGHT);
 	}
@@ -33,6 +35,15 @@ public class PlayerBullet extends Controllable
 		checkInputs(input);
 		move();
 		
+		this.hitbox.setPosition(this.position);
+		
+		return;
+	}
+	
+	@Override
+	public void draw(GameContainer game, Graphics gfx)
+	{
+		drawScaled(game, gfx, scale);
 		return;
 	}
 
