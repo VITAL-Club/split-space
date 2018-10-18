@@ -33,15 +33,24 @@ public class Enemy extends DrawableImage
 	@Override
 	public void update(Input input) 
 	{
-		if (isOffScreen(img.getWidth(), img.getHeight()))
+		if (this.position.y < 0)
 		{
-			this.velocity.x = -this.velocity.x;
-			this.position.y += Math.random() * 20 + 20;
-			if (this.position.y > GlobalConstants.GAME_HEIGHT)
+			this.velocity.y = 3;
+		}
+		else
+		{
+			this.velocity.y = 0;
+			
+			if (isOffScreen(img.getWidth(), img.getHeight()))
 			{
-				this.destroy = true;
+				this.velocity.x = -this.velocity.x;
+				this.position.y += (int) (Math.random() * 20 + 20);
+				if (this.position.y > GlobalConstants.GAME_HEIGHT)
+				{
+					this.destroy = true;
+				}
 			}
-		} 
+		}
 	
 		move();
 		

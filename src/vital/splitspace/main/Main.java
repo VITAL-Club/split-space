@@ -21,7 +21,7 @@ public class Main
 			app = new AppGameContainer(new SplitSpace("Split Space"));
 			app.setDisplayMode(	GlobalConstants.GAME_WIDTH,
 								GlobalConstants.GAME_HEIGHT,
-								false);
+								true);
 			app.start();
 		}
 		catch (SlickException ex)
@@ -31,3 +31,10 @@ public class Main
 		return;
 	}
 }
+
+// For any future visitors, this was duct taped together with way less time
+// than it deserved. As such it probably isn't the best code to learn any
+// good techniques from.
+
+// As you go through the commit history, you'll slowly see good intentions
+// die :D

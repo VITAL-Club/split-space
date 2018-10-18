@@ -4,11 +4,16 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
+import vital.splitspace.datatypes.OrderedPair;
+import vital.splitspace.main.GlobalConstants;
+
 /**
  * The Ship is the main player object.
  */
 public class Ship extends Controllable
 {
+
+	private int lives;
 	
 	public Ship()
 	{
@@ -18,6 +23,11 @@ public class Ship extends Controllable
 		
 		this.speed = 4;
 		this.scale = 3;
+		
+		this.lives = 3;
+		
+		setPosition(new OrderedPair(GlobalConstants.GAME_WIDTH / 2,
+				   GlobalConstants.GAME_HEIGHT / 4*3));
 		
 		// We set the keys we'll use for movement, as dictated by
 		// the Controllable parent class.
@@ -47,6 +57,23 @@ public class Ship extends Controllable
 	public void draw(GameContainer game, Graphics gfx)
 	{
 		drawScaled(game, gfx, scale);
+		gfx.drawString("Lives: " + lives, 0, GlobalConstants.GAME_HEIGHT /10*9);
+		return;
+	}
+	
+	public boolean loseLife()
+	{
+		this.lives--;
+		
+		if (this.lives <= 0)
+			return true;
+		else
+			return false;
+	}
+	
+	public void addLife()
+	{
+		this.lives++;
 		return;
 	}
 }

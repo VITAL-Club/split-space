@@ -5,7 +5,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 import vital.splitspace.drawable.Drawable;
-import vital.splitspace.main.GlobalConstants;
 
 public class Score extends Entity implements Drawable
 {

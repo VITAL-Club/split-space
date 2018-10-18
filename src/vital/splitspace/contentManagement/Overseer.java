@@ -6,6 +6,8 @@ import java.util.Random;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 
 import vital.splitspace.datatypes.OrderedPair;
 import vital.splitspace.drawable.Drawable;
@@ -33,6 +35,13 @@ public class Overseer
 	private Ship player;
 	private Score score;
 	
+	Sound playerShoot;
+	Sound enemyShoot;
+	Sound playerDie;
+	Sound enemyDie;
+	
+	Sound bgm;
+	
 	public Overseer()
 	{
 		this.entities = new ArrayList<>();
@@ -42,6 +51,19 @@ public class Overseer
 		this.playerBullets = new ArrayList<>();
 		
 		this.score = new Score();
+		
+		try
+		{
+			this.playerShoot = new Sound("resources/sounds/playerShoot.ogg");
+			this.enemyShoot = new Sound("resources/sounds/enemyShoot.ogg");
+			
+			this.playerDie = new Sound("resources/sounds/playerExplosion.ogg");
+			this.enemyDie = new Sound("resources/sounds/enemyExplosion.ogg");
+			
+			this.bgm = new Sound("resources/sounds/bgm.ogg");
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 		
 		return;
 	}
@@ -136,6 +158,8 @@ public class Overseer
 			
 			b.setPosition(new OrderedPair(op.x + 18, op.y));
 			addEntity(b);
+			
+			playerShoot.play();
 		}
 	}
 	
@@ -156,6 +180,8 @@ public class Overseer
 					p.destroy();
 					
 					score.addPoints(100);
+					
+					enemyDie.play();
 					
 					// Break to avoid multi-hits
 					break;
@@ -179,18 +205,28 @@ public class Overseer
 			if (Math.random() < ((double) 1 / 45))
 			{
 				EnemyBullet eb = new EnemyBullet();
-				eb.setPosition(new OrderedPair(e.getPosition().x,
+				eb.setPosition(new OrderedPair(e.getPosition().x + 15,
 											   e.getPosition().y));
 				
 				addEntity(eb);
+				
+				enemyShoot.play();
 			}
 		}
 	}
 	
+	private void resetGame()
+	{
+		removeEntity(player);
+		addEntity(new Ship());
+		
+		this.score = new Score();
+		
+		return;
+	}
+	
 	private void resetField()
 	{
-		// TODO: Add life mechanic here
-		
 		drawables.removeAll(enemies);
 		drawables.removeAll(enemyBullets);
 		drawables.removeAll(playerBullets);
@@ -201,6 +237,13 @@ public class Overseer
 		
 		player.setPosition(new OrderedPair(GlobalConstants.GAME_WIDTH / 2,
 										   GlobalConstants.GAME_HEIGHT /4*3));
+		
+		playerDie.play();
+		
+		if (this.player.loseLife())
+		{
+			resetGame();
+		}
 	}
 	
 	public void update(Input input)
@@ -229,6 +272,9 @@ public class Overseer
 			removeEntity(e);
 		
 		enemyShoot();
+		
+		if(!bgm.playing())
+			bgm.play();
 		
 		return;
 	}
