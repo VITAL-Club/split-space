@@ -35,3 +35,8 @@ Notes: => functions needed
                    |                          => Life Manager
                    
 Particles are for explosion from collision with the bullet to the Enemy or Spaceship
+
+
+To run the game, you need to add jinput, jogg, jorbis, lwjgl, slick into the eclipse build path, click on Project, build settings
+=> Build Path
+Here is the instruction on stuff: http://slick.ninjacave.com/wiki/index.php?title=Setting_up_Slick2D_with_Eclipse
